@@ -18,9 +18,15 @@ interface RoleFilterProps {
   onChange: (value: UserFilters["role"]) => void;
 }
 
+// Type for role options
+type RoleOption = {
+  value: UserFilters["role"];
+  label: string;
+};
+
 // Define role options outside component to prevent recreation
 // Using as const for better type inference
-const roleOptions = [
+const roleOptions: RoleOption[] = [
   { value: "all", label: "All Roles" },
   { value: "admin", label: "Admin" },
   { value: "editor", label: "Editor" },
@@ -33,18 +39,27 @@ export const RoleFilter = memo(({ value, onChange }: RoleFilterProps) => {
   const options = useMemo(() => roleOptions, []);
 
   return (
-    <Select value={value} onValueChange={onChange}>
-      <SelectTrigger className="w-full sm:w-[180px]">
-        <SelectValue placeholder="Filter by role" />
-      </SelectTrigger>
-      <SelectContent>
-        {options.map((option) => (
-          <SelectItem key={option.value} value={option.value}>
-            {option.label}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
+    <div>
+      <label htmlFor="role-filter" className="sr-only">
+        Filter by role
+      </label>
+      <Select value={value} onValueChange={onChange}>
+        <SelectTrigger id="role-filter" className="w-full sm:w-[180px]">
+          <SelectValue placeholder="Filter by role" />
+        </SelectTrigger>
+        <SelectContent>
+          {options.map((option) => (
+            <SelectItem 
+              key={option.value} 
+              value={option.value}
+              aria-label={`Filter by ${option.label}`}
+            >
+              {option.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
   );
 });
 

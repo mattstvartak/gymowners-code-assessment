@@ -124,8 +124,13 @@ export const UserDirectory = () => {
   // Loading state
   if (isLoading) {
     return (
-      <div className="fixed inset-0 z-[100] flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+      <div 
+        className="fixed inset-0 z-[100] flex items-center justify-center"
+        role="status"
+        aria-label="Loading user directory"
+      >
+        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" aria-hidden="true" />
+        <span className="sr-only">Loading user directory...</span>
       </div>
     );
   }
@@ -133,7 +138,7 @@ export const UserDirectory = () => {
   return (
     <div className="flex min-h-screen flex-col">
       {/* Header with search and filters */}
-      <div className="sticky top-0 z-[50] border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <header className="sticky top-0 z-[50] border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="px-4 py-4 sm:px-6 lg:px-8">
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -149,14 +154,14 @@ export const UserDirectory = () => {
             </div>
           </div>
         </div>
-      </div>
+      </header>
 
       {/* Main content area */}
-      <div className="flex-1">
+      <main className="flex-1">
         <div className="h-full px-4 py-8 sm:px-6 lg:px-8">
           {/* Sort controls */}
           <div className="mb-4 flex items-center gap-2">
-            <span className="text-sm text-muted-foreground">Sort by:</span>
+            <span className="text-sm text-foreground">Sort by:</span>
             <SortButton
               label="Name"
               isActive={sorting[0]?.id === "name"}
@@ -172,43 +177,55 @@ export const UserDirectory = () => {
           </div>
 
           {/* User cards grid */}
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div 
+            className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+            role="list"
+            aria-label="User list"
+          >
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <div
                   key={row.id}
                   className="rounded-lg border bg-card p-6 text-card-foreground shadow-sm"
+                  role="listitem"
                 >
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
-                      <h3 className="font-semibold">{row.getValue("name")}</h3>
-                      <span className={`rounded-full px-2 py-1 text-xs font-medium ${
-                        row.getValue("role") === "admin" 
-                          ? "bg-destructive/10 text-destructive" 
-                          : row.getValue("role") === "editor" 
-                            ? "bg-blue-100 text-blue-700"
-                            : "bg-green-100 text-green-700"
-                      }`}>
+                      <h3 className="font-semibold text-foreground">{row.getValue("name")}</h3>
+                      <span 
+                        className={`rounded-full px-2 py-1 text-xs font-medium ${
+                          row.getValue("role") === "admin" 
+                            ? "bg-red-100 text-red-800" 
+                            : row.getValue("role") === "editor" 
+                              ? "bg-blue-100 text-blue-800"
+                              : "bg-green-100 text-green-800"
+                        }`}
+                        role="status"
+                      >
                         {row.getValue("role")}
                       </span>
                     </div>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-sm text-foreground">
                       {row.getValue("email")}
                     </p>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-xs text-foreground">
                       ID: {row.getValue("id")}
                     </p>
                   </div>
                 </div>
               ))
             ) : (
-              <div className="col-span-full text-center text-muted-foreground">
+              <div 
+                className="col-span-full text-center text-foreground"
+                role="status"
+                aria-live="polite"
+              >
                 No users found matching your criteria
               </div>
             )}
           </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 }; 

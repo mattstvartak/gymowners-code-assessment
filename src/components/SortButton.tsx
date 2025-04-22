@@ -18,18 +18,29 @@ export const SortButton = memo(({
   isActive, 
   isDesc, 
   onClick 
-}: SortButtonProps) => (
-  <Button
-    variant="ghost"
-    size="sm"
-    onClick={onClick}
-    className={isActive ? "bg-accent" : ""}
-  >
-    {label}
-    <ArrowUp className={`ml-2 h-4 w-4 transition-transform ${
-      isActive ? (isDesc ? "rotate-0" : "rotate-180") : "rotate-180"
-    }`} />
-  </Button>
-));
+}: SortButtonProps) => {
+  const sortDirection = isActive ? (isDesc ? "descending" : "ascending") : "none";
+  const ariaLabel = `Sort by ${label} ${sortDirection}`;
+
+  return (
+    <Button
+      variant="ghost"
+      size="sm"
+      onClick={onClick}
+      className={isActive ? "bg-accent" : ""}
+      aria-label={ariaLabel}
+      role="button"
+      aria-pressed={isActive}
+    >
+      {label}
+      <ArrowUp 
+        className={`ml-2 h-4 w-4 transition-transform ${
+          isActive ? (isDesc ? "rotate-0" : "rotate-180") : "rotate-180"
+        }`}
+        aria-hidden="true"
+      />
+    </Button>
+  );
+});
 
 SortButton.displayName = "SortButton"; 

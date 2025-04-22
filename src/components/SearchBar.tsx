@@ -10,12 +10,21 @@ interface SearchBarProps {
 export const SearchBar = memo(({ value, onChange }: SearchBarProps) => {
   return (
     <div className="relative">
-      <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-500" />
+      <label htmlFor="user-search" className="sr-only">
+        Search users
+      </label>
+      <Search 
+        className="absolute left-2 top-2.5 h-4 w-4 text-gray-500" 
+        aria-hidden="true"
+      />
       <Input
+        id="user-search"
+        type="search"
         placeholder="Search by name or email..."
         value={value}
         onChange={(e) => onChange(e.target.value)}
         className="pl-8"
+        aria-label="Search users by name or email"
       />
     </div>
   );
